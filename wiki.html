@@ -16,6 +16,7 @@
       line-height: 1.6;
       color: #333;
       background-color: #f9f9f9;
+      padding-bottom: 2rem;
     }
     header {
       background-color: #003366;
@@ -72,6 +73,13 @@
     p {
       margin-bottom: 1rem;
     }
+    ul, ol {
+      margin-left: 2rem;
+      margin-bottom: 1rem;
+    }
+    li {
+      margin-bottom: 0.5rem;
+    }
     pre {
       background-color: #f5f5f5;
       padding: 1rem;
@@ -118,56 +126,76 @@
       <li><a href="#introduction">Introduction</a></li>
       <li><a href="#problem">Problem Statement</a></li>
       <li><a href="#design">Design &amp; Implementation</a></li>
+      <li><a href="#view-updates">View Updates</a></li>
       <li><a href="#code-snippets">Code Snippets</a></li>
-      <li><a href="#testing">Testing Strategy</a></li>
+      <li><a href="#testing">Testing</a></li>
+      <li><a href="#ai-tools">AI Tools</a></li>
       <li><a href="#conclusion">Conclusion</a></li>
       <li><a href="#references">References</a></li>
+      <li><a href="#peer-review">Peer Review</a></li>
     </ul>
   </nav>
   
   <div class="container">
+    <!-- Introduction Section -->
     <div class="content" id="introduction">
       <h2>Introduction</h2>
       <p>
-        Expertiza is a robust open-source project that facilitates assignment creation, topic sign-ups, team-based projects, and peer reviews using the Ruby on Rails framework. With an emphasis on assignment-specific participation, the current design for student teams deviates from the domain model. This document explains our comprehensive refactoring effort—transitioning from a user-centric to a participant-centric approach—to improve data consistency, code clarity, and maintainability.
+        Expertiza is a well-established open-source project built with Ruby on Rails that supports assignment creation, topic sign-ups, team-based projects, and peer reviews. Despite its robust functionality, the existing implementation of team management does not fully align with our intended domain model. In particular, team memberships are linked to global user IDs, which fails to capture the assignment-specific nature of participation. Recognizing this misalignment, our refactoring initiative is focused on transitioning the system to a participant-centric model that offers better clarity, reduces ambiguity, and enhances maintainability.
       </p>
       <p>
-        The following narrative describes the rationale behind the refactor, the key changes implemented, and provides detailed insights through code examples that illustrate how these improvements enhance the overall system.
+        This document presents a detailed narrative of the refactoring effort. It explains the problems inherent in the current design, outlines the new design and implementation strategies, describes the updates made to the views, and shares code snippets alongside in-depth explanations. We conclude by discussing our comprehensive testing strategy and the advanced AI tools we employed to aid in the refactoring process.
       </p>
     </div>
     
+    <!-- Problem Statement Section -->
     <div class="content" id="problem">
       <h2>Problem Statement</h2>
       <p>
-        In the current system, team memberships are managed via the <code>teams_users</code> table, which associates a global <code>user_id</code> with a team. However, since a user can have multiple <code>participant</code> records—one per assignment—this approach leads to ambiguity and inconsistencies in identifying team members uniquely.
+        In the present system, team memberships are tracked via the <code>teams_users</code> table. This table associates a global <code>user_id</code> with each team, but it does not consider that a single user may have multiple <code>participant</code> records – one for each assignment in which they participate. This oversight creates ambiguity, making it difficult to unequivocally determine a student’s membership in a specific assignment context.
       </p>
       <p>
-        Furthermore, the existing controllers and models intermingle responsibilities by embedding business logic directly within control flow, making the code complex and prone to errors. Outdated naming conventions and manual SQL queries in models such as <code>SignedUpTeam</code> exacerbate these issues, contributing significantly to technical debt.
+        Furthermore, the current implementation suffers from a variety of issues. The controllers embed business logic that should ideally be separated from control flow, thereby resulting in lengthy, hard-to-maintain methods. In addition, raw SQL queries in models such as <code>SignedUpTeam</code> reduce code readability and increase the risk of errors such as SQL injection. Together, these problems contribute to increasing technical debt, making the overall codebase more fragile and challenging to extend.
       </p>
     </div>
     
+    <!-- Design & Implementation Section -->
     <div class="content" id="design">
       <h2>Design &amp; Implementation</h2>
       <p>
-        Our refactoring initiative is driven by the need to realign the student teams functionality with Expertiza’s core domain model. The primary goal is to replace the global <code>user_id</code> in team memberships with a <code>participant_id</code>, representing a student's role in a specific assignment.
+        To address these issues, our refactoring initiative has been carefully planned to realign the system with the proper domain model. The strategy involves a comprehensive transition from a user-centric to a participant-centric framework. We began by rethinking the data model: instead of associating teams with global <code>user_id</code> values, we now use a <code>participant_id</code> to clearly define a student's involvement in a specific assignment.
       </p>
       <p>
-        To achieve this, we will perform a database migration that renames the <code>teams_users</code> table to <code>teams_participants</code> and introduces a new <code>participant_id</code> field. This change ensures that each team’s membership is contextually linked to an assignment, thereby reducing ambiguity and improving data integrity.
+        This transformation is anchored by a database migration that renames the outdated <code>teams_users</code> table to <code>teams_participants</code> and introduces a new column for <code>participant_id</code>. This migration not only eliminates ambiguity by ensuring that every team membership is linked to an assignment-specific participant but also enforces data integrity by removing the now redundant <code>user_id</code> field.
       </p>
       <p>
-        Additionally, we will update all models and associations. The new <code>TeamsParticipant</code> model will set up <code>belongs_to</code> relationships with both <code>Team</code> and <code>Participant</code> models. This update simplifies data retrieval and encapsulates business logic within the appropriate models.
+        In parallel with the schema changes, the model layer was revised to reflect the new associations. The <code>TeamsParticipant</code> model now definitively establishes <code>belongs_to</code> relationships with both the <code>Team</code> and the <code>Participant</code> models, thereby encapsulating the business logic relevant to team membership within a focused and maintainable structure.
       </p>
       <p>
-        Controllers will be refactored next, with the introduction of a dedicated <code>TeamsParticipantsController</code> to manage team membership operations. This controller will enforce authorization, manage error handling robustly, and segregate responsibilities per Rails’ MVC best practices.
+        On the controller side, we introduced the <code>TeamsParticipantsController</code> to manage all membership-related actions. This controller is dedicated solely to adding or removing participants from teams, which helps to keep the business logic separate from the control flow in the higher-level TeamsController. By refining both models and controllers according to Rails' MVC best practices, we have achieved a cleaner, more modular codebase.
       </p>
     </div>
     
+    <!-- View Updates Section -->
+    <div class="content" id="view-updates">
+      <h2>View Updates</h2>
+      <p>
+        An important part of our refactoring process was updating the views to reflect the new underlying architecture and provide a better user experience. We have completely reworked the view templates to ensure that they gracefully handle cases where data may be nil, thus avoiding unexpected crashes or confusing outputs.
+      </p>
+      <p>
+        The views now offer more informative error messages and immediate user feedback, which significantly enhances the file submission process. In cases where validations fail, the user is promptly informed with clear, context-specific feedback. Additionally, the layout for displaying team members has been improved to present information in a more organized and visually appealing manner. Enhanced error state handling means that users receive consistent feedback when something goes wrong, helping them to quickly understand and address any issues encountered.
+      </p>
+    </div>
+    
+    <!-- Code Snippets Section -->
     <div class="content" id="code-snippets">
       <h2>Code Snippets &amp; Explanations</h2>
-      
+      <p>
+        The following sections present key code snippets from the refactored system, along with detailed explanations to illustrate how these changes underpin the overall improvements.
+      </p>
       <h3>TeamsParticipant Model</h3>
       <p>
-        The <code>TeamsParticipant</code> model now serves as the join between teams and participants. This model replaces the legacy <code>TeamsUser</code> model.
+        At the core of our refactoring effort is the new <code>TeamsParticipant</code> model. This model replaces the legacy <code>TeamsUser</code> implementation by establishing explicit associations with both <code>Team</code> and <code>Participant</code> models. The model enforces the presence of both identifiers, ensuring that each team membership is valid and unambiguously tied to the correct assignment context.
       </p>
       <pre><code>class TeamsParticipant < ApplicationRecord
   belongs_to :team
@@ -177,12 +205,11 @@
   validates :participant_id, presence: true
 end</code></pre>
       <p>
-        <strong>Explanation:</strong> The model establishes clear <code>belongs_to</code> associations with both a <code>Team</code> and a <code>Participant</code>. The validations ensure that every team membership record is complete and uniquely tied to its assignment context.
+        In the code above, the <code>belongs_to</code> associations and validations guarantee data integrity and improve the overall clarity of the data model.
       </p>
-      
       <h3>TeamsParticipantsController</h3>
       <p>
-        The new controller focuses exclusively on the management of team memberships. The example below shows the implementation of the <code>create</code> action:
+        The refactored <code>TeamsParticipantsController</code> is responsible for handling team membership operations in isolation from other aspects of team management. The following is an example implementation of the <code>create</code> action within this controller:
       </p>
       <pre><code>class TeamsParticipantsController < ApplicationController
   before_action :set_team
@@ -212,38 +239,52 @@ end</code></pre>
   end
 end</code></pre>
       <p>
-        <strong>Explanation:</strong> This controller action begins by ensuring the participant exists, then it builds a new <code>TeamsParticipant</code> record associated with the current team. Flash messages are used to provide clear user feedback in both success and error scenarios.
+        The controller action above begins by verifying the existence of the participant. It then builds a new association between the team and the participant and saves this record while providing immediate and clear feedback to the user through flash messages. This pattern of immediate validation and feedback is consistent throughout the refactored codebase.
       </p>
     </div>
     
+    <!-- Testing Section -->
     <div class="content" id="testing">
-      <h2>Testing Strategy</h2>
+      <h2>Testing</h2>
       <p>
-        A robust testing strategy accompanies this refactor to ensure system stability. Our approach includes:
+        To ensure the robustness of our refactored system, we have implemented an extensive testing strategy. Testing is performed on multiple levels to catch any potential issues early and to verify that all components interact as expected.
       </p>
       <p>
-        <strong>Unit Testing:</strong> We will use RSpec to validate that the <code>TeamsParticipant</code> model correctly enforces validations, associations, and business logic, such as preventing duplicate memberships.
+        Our automated tests are written using RSPEC and cover unit tests for the <code>TeamsParticipant</code> model, ensuring that associations and validations perform as intended. The tests include scenarios that prevent duplicate memberships and confirm that only valid data is saved. In addition, controller tests simulate various operational scenarios—such as successfully adding a participant, handling invalid inputs, and ensuring proper redirection—all of which help to enforce robust error handling.
       </p>
       <p>
-        <strong>Controller Testing:</strong> The <code>TeamsParticipantsController</code> will be thoroughly tested by simulating various scenarios—such as successful additions, invalid inputs, and proper redirection—to ensure comprehensive error handling.
-      </p>
-      <p>
-        <strong>Integration Testing:</strong> End-to-end tests will simulate the complete flow of team creation, member invitations, and topic sign-ups to verify that the refactored code integrates seamlessly with the rest of the system.
+        Beyond automated testing, we have also conducted thorough integration testing by simulating complete user workflows. For example, the process of creating a new team, adding team members, and handling file submissions has been rigorously tested through both automated feature tests and manual UI-based tests. This dual approach ensures that the system remains stable in real-world scenarios.
       </p>
     </div>
     
+    <!-- AI Tools Section -->
+    <div class="content" id="ai-tools">
+      <h2>AI Tools Used for Code Refactoring</h2>
+      <p>
+        In our refactoring process, we took full advantage of the capabilities offered by modern AI-powered tools. In particular, Cursor IDE played a pivotal role. Cursor provided advanced code analysis, enabling us to search semantically across the entire codebase, intelligently navigate through complex relationships, and automatically suggest code refactorings.
+      </p>
+      <p>
+        The tool’s contextual understanding helped us quickly identify areas where the business logic was misplaced, such as in controllers that were too heavily burdened with multifaceted responsibilities. Moreover, its ability to suggest method renamings and reorganize code improved not only the readability but also the overall maintainability of the system. This integration of AI assistance ensured that our refactoring was both efficient and aligned with best practices.
+      </p>
+    </div>
+    
+    <!-- Conclusion Section -->
     <div class="content" id="conclusion">
       <h2>Conclusion</h2>
       <p>
-        Transitioning from a user-centric to a participant-centric model for team memberships significantly improves the integrity and clarity of Expertiza’s data model. The refactoring effort—encompassing database migrations, updated models, and streamlined controllers—eliminates ambiguity and reduces technical debt.
+        Transitioning from a user-centric model to a participant-centric model for managing team memberships has led to significant improvements in both clarity and maintainability. By rearchitecting the underlying database, updating models and controllers, and refining the view layer, we have reduced technical debt while offering a more robust, scalable foundation for future enhancements.
       </p>
       <p>
-        The introduction of the <code>TeamsParticipant</code> model and the <code>TeamsParticipantsController</code> ensures that team memberships are managed in a way that is both intuitive and scalable. With comprehensive testing in place, we are confident that these changes will enhance usability and maintainability for both instructors and students.
+        The refactored system not only ensures data integrity by uniquely linking team memberships to assignment-specific participants but also improves user experience with enhanced error handling and informative feedback. With comprehensive testing and the support of AI-assisted tools like Cursor IDE, we are confident that the updated implementation will benefit both instructors and students alike, setting the stage for further innovation within the Expertiza platform.
       </p>
     </div>
     
+    <!-- References Section -->
     <div class="content references" id="references">
       <h2>References</h2>
+      <p>
+        The following resources were instrumental in guiding the refactoring process and ensuring adherence to best practices. We consulted the Expertiza GitHub repository for code examples, the Ruby on Rails documentation for framework-specific details, and RSPEC documentation to design our automated tests. Additionally, the principles outlined in "Clean Code: A Handbook of Agile Software Craftsmanship" provided a strong foundation for improving our coding standards.
+      </p>
       <ol>
         <li><a href="https://github.com/expertiza/expertiza" target="_blank">Expertiza on GitHub</a></li>
         <li><a href="https://github.com/expertiza/expertiza-fork" target="_blank">GitHub Project Repository Fork</a></li>
@@ -254,10 +295,14 @@ end</code></pre>
       </ol>
     </div>
     
+    <!-- Peer Review Section -->
     <div class="content peer-review" id="peer-review">
       <h2>Peer Review Information</h2>
       <p>
-        For instructors and peers reviewing this document on the wiki, please note that this design document replaces the previous bullet-point version. It now provides a comprehensive, narrative overview, detailed code explanations, and is fully integrated into our wiki for easy accessibility.
+        For instructors and peers reviewing this document on the wiki, please note that this narrative design document replaces the earlier bullet-based version. It provides a comprehensive, detailed overview of our design decisions, code updates, testing strategies, and the methodology used during the refactoring process.
+      </p>
+      <p>
+        This document is intended to serve as both an educational resource for future developers and a historical record of the improvements made during this project phase.
       </p>
       <p>
         <strong>Instructor Credentials:</strong><br>
