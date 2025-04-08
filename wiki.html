@@ -1,368 +1,319 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CSC/ECE 517 Spring 2025/oss E1553 TeamsParticipant Migration</title>
-    <style>
-        /* Reset and base styles */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: Arial, sans-serif;
-            line-height: 1.6;
-            color: #333;
-            background-color: #f9f9f9;
-        }
-
-        /* Header styles */
-        .header {
-            background-color: #003366;
-            color: white;
-            padding: 1rem;
-            text-align: center;
-        }
-
-        .header h1 {
-            font-size: 2rem;
-            margin-bottom: 0.5rem;
-        }
-
-        /* Navigation styles */
-        .nav {
-            background-color: #f0f0f0;
-            padding: 0.5rem;
-            border-bottom: 1px solid #ddd;
-        }
-
-        .nav ul {
-            list-style: none;
-            display: flex;
-            justify-content: center;
-            gap: 1rem;
-        }
-
-        .nav a {
-            color: #003366;
-            text-decoration: none;
-            padding: 0.5rem 1rem;
-            border-radius: 4px;
-        }
-
-        .nav a:hover {
-            background-color: #e0e0e0;
-        }
-
-        /* Main content styles */
-        .container {
-            max-width: 1200px;
-            margin: 2rem auto;
-            padding: 0 1rem;
-        }
-
-        .content {
-            background-color: white;
-            padding: 2rem;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-
-        /* Section styles */
-        h2 {
-            color: #003366;
-            margin: 2rem 0 1rem;
-            padding-bottom: 0.5rem;
-            border-bottom: 2px solid #003366;
-        }
-
-        h3 {
-            color: #004080;
-            margin: 1.5rem 0 1rem;
-        }
-
-        /* List styles */
-        ul, ol {
-            margin-left: 2rem;
-            margin-bottom: 1rem;
-        }
-
-        li {
-            margin-bottom: 0.5rem;
-        }
-
-        /* Code block styles */
-        pre {
-            background-color: #f5f5f5;
-            padding: 1rem;
-            border-radius: 4px;
-            overflow-x: auto;
-            margin: 1rem 0;
-        }
-
-        code {
-            font-family: 'Courier New', Courier, monospace;
-            background-color: #f5f5f5;
-            padding: 0.2rem 0.4rem;
-            border-radius: 3px;
-        }
-
-        /* Table styles */
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 1rem 0;
-        }
-
-        th, td {
-            padding: 0.5rem;
-            border: 1px solid #ddd;
-            text-align: left;
-        }
-
-        th {
-            background-color: #f0f0f0;
-        }
-
-        /* Problem/Solution styles */
-        .problem {
-            margin: 1rem 0;
-            padding: 1rem;
-            background-color: #f8f9fa;
-            border-left: 4px solid #003366;
-        }
-
-        .solution {
-            margin-left: 1rem;
-        }
-
-        .benefit {
-            margin-left: 1rem;
-            color: #006600;
-        }
-
-        /* References section */
-        .references {
-            background-color: #f8f9fa;
-            padding: 1rem;
-            border-radius: 4px;
-            margin-top: 2rem;
-        }
-
-        /* Peer Review Information styles */
-        .peer-review {
-            background-color: #f8f9fa;
-            padding: 1.5rem;
-            margin: 2rem 0;
-            border-radius: 4px;
-            border: 1px solid #e0e0e0;
-        }
-
-        .peer-review h2 {
-            color: #003366;
-            margin-bottom: 1rem;
-            border-bottom: 2px solid #003366;
-            padding-bottom: 0.5rem;
-        }
-
-        .credentials {
-            background-color: white;
-            padding: 1rem;
-            border-radius: 4px;
-            margin-top: 1rem;
-            border: 1px solid #e0e0e0;
-        }
-
-        .credentials p {
-            margin-bottom: 0.5rem;
-        }
-
-        .credentials strong {
-            color: #003366;
-        }
-
-        /* Responsive design */
-        @media (max-width: 768px) {
-            .nav ul {
-                flex-direction: column;
-                align-items: center;
-            }
-
-            .container {
-                padding: 0 0.5rem;
-            }
-
-            .content {
-                padding: 1rem;
-            }
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CSC/ECE 517 Spring 2025 / E2500: Refactoring Student Teams Functionality</title>
+  <style>
+    /* Reset and base styles */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: Arial, sans-serif;
+      line-height: 1.6;
+      color: #333;
+      background-color: #f9f9f9;
+      padding-bottom: 2rem;
+    }
+    header {
+      background-color: #003366;
+      color: white;
+      padding: 1rem;
+      text-align: center;
+    }
+    header h1 {
+      font-size: 2rem;
+      margin-bottom: 0.5rem;
+    }
+    nav {
+      background-color: #f0f0f0;
+      padding: 0.5rem;
+      border-bottom: 1px solid #ddd;
+    }
+    nav ul {
+      list-style: none;
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+    }
+    nav a {
+      color: #003366;
+      text-decoration: none;
+      padding: 0.5rem 1rem;
+      border-radius: 4px;
+    }
+    nav a:hover {
+      background-color: #e0e0e0;
+    }
+    .container {
+      max-width: 1200px;
+      margin: 2rem auto;
+      padding: 0 1rem;
+    }
+    .content {
+      background-color: white;
+      padding: 2rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      margin-bottom: 2rem;
+    }
+    h2 {
+      color: #003366;
+      margin: 2rem 0 1rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 2px solid #003366;
+    }
+    h3 {
+      color: #004080;
+      margin: 1.5rem 0 1rem;
+    }
+    p {
+      margin-bottom: 1rem;
+    }
+    ul, ol {
+      margin-left: 2rem;
+      margin-bottom: 1rem;
+    }
+    li {
+      margin-bottom: 0.5rem;
+    }
+    pre {
+      background-color: #f5f5f5;
+      padding: 1rem;
+      border-radius: 4px;
+      overflow-x: auto;
+      margin: 1rem 0;
+    }
+    code {
+      font-family: 'Courier New', Courier, monospace;
+    }
+    .references, .peer-review {
+      background-color: #f8f9fa;
+      padding: 1rem;
+      border-radius: 4px;
+      margin-top: 2rem;
+    }
+    .footer {
+      text-align: center;
+      padding: 1rem;
+      font-size: 0.9rem;
+      color: #666;
+    }
+    @media (max-width: 768px) {
+      nav ul {
+        flex-direction: column;
+        align-items: center;
+      }
+      .container {
+        padding: 0 0.5rem;
+      }
+      .content {
+        padding: 1rem;
+      }
+    }
+  </style>
 </head>
 <body>
-    <header class="header">
-        <h1>CSC/ECE 517 Spring 2025/oss E1553 TeamsParticipant Migration</h1>
-    </header>
-
-    <nav class="nav">
-        <ul>
-            <li><a href="#peer-review">Peer Review</a></li>
-            <li><a href="#about">About Expertiza</a></li>
-            <li><a href="#problem">Problem Statement</a></li>
-            <li><a href="#model">TeamsParticipant Model</a></li>
-            <li><a href="#implementation">Implementation</a></li>
-            <li><a href="#testing">Testing</a></li>
-            <li><a href="#ai-tools">AI Tools</a></li>
-            <li><a href="#references">References</a></li>
-        </ul>
-    </nav>
-
-    <div class="container">
-        <div class="content">
-
-            <section id="about">
-                <h2>About Expertiza</h2>
-                <p>Expertiza is an open source project based on Ruby on Rails framework. Expertiza allows instructors to create new assignments and customize new or existing assignments. It also allows instructors to create a list of topics that students can sign up for. Students can form teams in Expertiza to work on various projects and assignments. Students can also peer review other students' submissions. Expertiza supports submission across various document types, including URLs and wiki pages.</p>
-            </section>
-
-            <section id="problem">
-                <h2>Problem Statement</h2>
-                <p>The following tasks were accomplished in this project:</p>
-                <ul>
-                    <li>Migrated from the deprecated `TeamsUser` model to the new `TeamsParticipant` model</li>
-                    <li>Updated all model and controller tests to use the new model structure</li>
-                    <li>Improved code clarity by updating variable and parameter names</li>
-                    <li>Ensured backward compatibility while transitioning to the new model</li>
-                    <li>Added comprehensive test coverage for the new model structure</li>
-                    <li>Fixed various issues related to team member access and file submissions</li>
-                    <li>Enhanced error handling and edge case coverage</li>
-                </ul>
-            </section>
-
-            <section id="peer-review" class="peer-review">
-                <h2>Peer Review Information</h2>
-                <p>For users intending to view the deployed Expertiza associated with this assignment, the credentials are below:</p>
-                <div class="credentials">
-                    <p><strong>Instructor login:</strong> username -> instructor6, password -> password</p>
-                </div>
-            </section>
-
-            <section id="model">
-                <h2>About TeamsParticipant Model</h2>
-                <p>The `TeamsParticipant` model manages the relationship between teams and participants in Expertiza. This model replaces the older `TeamsUser` model to provide a more structured way of handling team memberships. The key differences are:</p>
-                <ul>
-                    <li>Direct association with participants instead of users</li>
-                    <li>Better separation of concerns between team membership and user management</li>
-                    <li>Improved data integrity through proper relationships</li>
-                    <li>More efficient querying of team memberships</li>
-                    <li>Better handling of team member duties and roles</li>
-                    <li>Enhanced error handling and validation</li>
-                </ul>
-            </section>
-
-            <section id="implementation">
-                <h2>New Implementation</h2>
-                
-                <h3>Model Changes</h3>
-                <pre><code>class TeamsParticipant < ApplicationRecord
+  <header>
+    <h1>CSC/ECE 517 Spring 2025 / E2500: Refactoring Student Teams Functionality</h1>
+  </header>
+  
+  <nav>
+    <ul>
+      <li><a href="#introduction">Introduction</a></li>
+      <li><a href="#problem">Problem Statement</a></li>
+      <li><a href="#design">Design &amp; Implementation</a></li>
+      <li><a href="#view-updates">View Updates</a></li>
+      <li><a href="#code-snippets">Code Snippets</a></li>
+      <li><a href="#testing">Testing</a></li>
+      <li><a href="#ai-tools">AI Tools</a></li>
+      <li><a href="#conclusion">Conclusion</a></li>
+      <li><a href="#references">References</a></li>
+      <li><a href="#peer-review">Peer Review</a></li>
+    </ul>
+  </nav>
+  
+  <div class="container">
+    <!-- Introduction Section -->
+    <div class="content" id="introduction">
+      <h2>Introduction</h2>
+      <p>
+        Expertiza is a well-established open-source project built with Ruby on Rails that supports assignment creation, topic sign-ups, team-based projects, and peer reviews. Despite its robust functionality, the existing implementation of team management does not fully align with our intended domain model. In particular, team memberships are linked to global user IDs, which fails to capture the assignment-specific nature of participation. Recognizing this misalignment, our refactoring initiative is focused on transitioning the system to a participant-centric model that offers better clarity, reduces ambiguity, and enhances maintainability.
+      </p>
+      <p>
+        This document presents a detailed narrative of the refactoring effort. It explains the problems inherent in the current design, outlines the new design and implementation strategies, describes the updates made to the views, and shares code snippets alongside in-depth explanations. We conclude by discussing our comprehensive testing strategy and the advanced AI tools we employed to aid in the refactoring process.
+      </p>
+    </div>
+    
+    <!-- Problem Statement Section -->
+    <div class="content" id="problem">
+      <h2>Problem Statement</h2>
+      <p>
+        In the present system, team memberships are tracked via the <code>teams_users</code> table. This table associates a global <code>user_id</code> with each team, but it does not consider that a single user may have multiple <code>participant</code> records – one for each assignment in which they participate. This oversight creates ambiguity, making it difficult to unequivocally determine a student’s membership in a specific assignment context.
+      </p>
+      <p>
+        Furthermore, the current implementation suffers from a variety of issues. The controllers embed business logic that should ideally be separated from control flow, thereby resulting in lengthy, hard-to-maintain methods. In addition, raw SQL queries in models such as <code>SignedUpTeam</code> reduce code readability and increase the risk of errors such as SQL injection. Together, these problems contribute to increasing technical debt, making the overall codebase more fragile and challenging to extend.
+      </p>
+    </div>
+    
+    <!-- Design & Implementation Section -->
+    <div class="content" id="design">
+      <h2>Design &amp; Implementation</h2>
+      <p>
+        To address these issues, our refactoring initiative has been carefully planned to realign the system with the proper domain model. The strategy involves a comprehensive transition from a user-centric to a participant-centric framework. We began by rethinking the data model: instead of associating teams with global <code>user_id</code> values, we now use a <code>participant_id</code> to clearly define a student's involvement in a specific assignment.
+      </p>
+      <p>
+        This transformation is anchored by a database migration that renames the outdated <code>teams_users</code> table to <code>teams_participants</code> and introduces a new column for <code>participant_id</code>. This migration not only eliminates ambiguity by ensuring that every team membership is linked to an assignment-specific participant but also enforces data integrity by removing the now redundant <code>user_id</code> field.
+      </p>
+      <p>
+        In parallel with the schema changes, the model layer was revised to reflect the new associations. The <code>TeamsParticipant</code> model now definitively establishes <code>belongs_to</code> relationships with both the <code>Team</code> and the <code>Participant</code> models, thereby encapsulating the business logic relevant to team membership within a focused and maintainable structure.
+      </p>
+      <p>
+        On the controller side, we introduced the <code>TeamsParticipantsController</code> to manage all membership-related actions. This controller is dedicated solely to adding or removing participants from teams, which helps to keep the business logic separate from the control flow in the higher-level TeamsController. By refining both models and controllers according to Rails' MVC best practices, we have achieved a cleaner, more modular codebase.
+      </p>
+    </div>
+    
+    <!-- View Updates Section -->
+    <div class="content" id="view-updates">
+      <h2>View Updates</h2>
+      <p>
+        An important part of our refactoring process was updating the views to reflect the new underlying architecture and provide a better user experience. We have completely reworked the view templates to ensure that they gracefully handle cases where data may be nil, thus avoiding unexpected crashes or confusing outputs.
+      </p>
+      <p>
+        The views now offer more informative error messages and immediate user feedback, which significantly enhances the file submission process. In cases where validations fail, the user is promptly informed with clear, context-specific feedback. Additionally, the layout for displaying team members has been improved to present information in a more organized and visually appealing manner. Enhanced error state handling means that users receive consistent feedback when something goes wrong, helping them to quickly understand and address any issues encountered.
+      </p>
+    </div>
+    
+    <!-- Code Snippets Section -->
+    <div class="content" id="code-snippets">
+      <h2>Code Snippets &amp; Explanations</h2>
+      <p>
+        The following sections present key code snippets from the refactored system, along with detailed explanations to illustrate how these changes underpin the overall improvements.
+      </p>
+      <h3>TeamsParticipant Model</h3>
+      <p>
+        At the core of our refactoring effort is the new <code>TeamsParticipant</code> model. This model replaces the legacy <code>TeamsUser</code> implementation by establishing explicit associations with both <code>Team</code> and <code>Participant</code> models. The model enforces the presence of both identifiers, ensuring that each team membership is valid and unambiguously tied to the correct assignment context.
+      </p>
+      <pre><code>class TeamsParticipant < ApplicationRecord
   belongs_to :team
   belongs_to :participant
+
   validates :team_id, presence: true
   validates :participant_id, presence: true
 end</code></pre>
+      <p>
+        In the code above, the <code>belongs_to</code> associations and validations guarantee data integrity and improve the overall clarity of the data model.
+      </p>
+      <h3>TeamsParticipantsController</h3>
+      <p>
+        The refactored <code>TeamsParticipantsController</code> is responsible for handling team membership operations in isolation from other aspects of team management. The following is an example implementation of the <code>create</code> action within this controller:
+      </p>
+      <pre><code>class TeamsParticipantsController < ApplicationController
+  before_action :set_team
 
-                <h3>Controller Updates</h3>
-                <ul>
-                    <li>Renamed `TeamsUsersController` to `TeamsParticipantsController`</li>
-                    <li>Updated all team-related actions to use the new model</li>
-                    <li>Added proper authorization checks</li>
-                    <li>Improved error handling</li>
-                    <li>Enhanced file submission handling</li>
-                    <li>Added proper nil checks and validations</li>
-                    <li>Added comprehensive error messages</li>
-                </ul>
+  # POST /teams/:team_id/participants
+  def create
+    @participant = Participant.find_by(id: params[:participant_id])
+    unless @participant
+      flash[:error] = "Participant not found."
+      redirect_to team_path(@team) and return
+    end
 
-                <h3>View Updates</h3>
-                <ul>
-                    <li>Updated views to handle nil cases properly</li>
-                    <li>Improved error messages and user feedback</li>
-                    <li>Enhanced file submission interface</li>
-                    <li>Added proper validation feedback</li>
-                    <li>Improved team member display</li>
-                    <li>Added error state handling</li>
-                    <li>Enhanced user feedback for edge cases</li>
-                </ul>
-            </section>
+    @teams_participant = @team.teams_participants.build(participant: @participant)
+    if @teams_participant.save
+      flash[:success] = "Participant successfully added to the team."
+      redirect_to team_path(@team)
+    else
+      flash[:error] = "Failed to add participant: " + @teams_participant.errors.full_messages.to_sentence
+      redirect_to team_path(@team)
+    end
+  end
 
-            <section id="testing">
-                <h2>Testing</h2>
-                
-                <h3>Automated Testing using RSPEC</h3>
-                <p>The project includes comprehensive RSPEC tests for all updated components. The tests use:</p>
-                <ul>
-                    <li>Mocking and stubbing for isolated testing</li>
-                    <li>Shared contexts for common test scenarios</li>
-                    <li>Clear test descriptions</li>
-                    <li>Proper test organization</li>
-                    <li>Better error handling</li>
-                    <li>Edge case coverage</li>
-                    <li>Error state testing</li>
-                </ul>
+  private
 
-                <h3>Testing from UI</h3>
-                <p>The following test cases can be verified from the UI:</p>
-                <ul>
-                    <li>Team Creation
-                        <ul>
-                            <li>Create a new team</li>
-                            <li>Add members to the team</li>
-                            <li>Verify team member access</li>
-                            <li>Test file submissions</li>
-                            <li>Verify error handling</li>
-                            <li>Test edge cases</li>
-                        </ul>
-                    </li>
-                </ul>
-            </section>
-
-            <section id="ai-tools">
-                <h2>AI Tools Used for Code Refactoring</h2>
-                
-                <h3>Cursor IDE</h3>
-                <p>Cursor is an AI-powered code editor that played a crucial role in this project's code refactoring process. The following features were particularly helpful:</p>
-                
-                <h4>Code Analysis and Understanding</h4>
-                <ul>
-                    <li>Semantic code search across the entire codebase</li>
-                    <li>Intelligent code navigation and context understanding</li>
-                    <li>Automated code structure analysis</li>
-                    <li>Smart code completion and suggestions</li>
-                </ul>
-
-                <h4>Refactoring Assistance</h4>
-                <ul>
-                    <li>Automated code refactoring suggestions</li>
-                    <li>Intelligent method renaming and restructuring</li>
-                    <li>Smart code organization and formatting</li>
-                    <li>Automated dependency management</li>
-                </ul>
-            </section>
-
-            <section id="references" class="references">
-                <h2>References</h2>
-                <ol>
-                    <li>Expertiza on GitHub</li>
-                    <li>GitHub Project Repository Fork</li>
-                    <li>The live Expertiza website</li>
-                    <li>Demo link</li>
-                    <li>Expertiza project documentation wiki</li>
-                    <li>Rspec Documentation</li>
-                    <li>Clean Code: A handbook of agile software craftsmanship. Author: Robert C Martin</li>
-                </ol>
-            </section>
-        </div>
+  def set_team
+    @team = Team.find(params[:team_id])
+  end
+end</code></pre>
+      <p>
+        The controller action above begins by verifying the existence of the participant. It then builds a new association between the team and the participant and saves this record while providing immediate and clear feedback to the user through flash messages. This pattern of immediate validation and feedback is consistent throughout the refactored codebase.
+      </p>
     </div>
+    
+    <!-- Testing Section -->
+    <div class="content" id="testing">
+      <h2>Testing</h2>
+      <p>
+        To ensure the robustness of our refactored system, we have implemented an extensive testing strategy. Testing is performed on multiple levels to catch any potential issues early and to verify that all components interact as expected.
+      </p>
+      <p>
+        Our automated tests are written using RSPEC and cover unit tests for the <code>TeamsParticipant</code> model, ensuring that associations and validations perform as intended. The tests include scenarios that prevent duplicate memberships and confirm that only valid data is saved. In addition, controller tests simulate various operational scenarios—such as successfully adding a participant, handling invalid inputs, and ensuring proper redirection—all of which help to enforce robust error handling.
+      </p>
+      <p>
+        Beyond automated testing, we have also conducted thorough integration testing by simulating complete user workflows. For example, the process of creating a new team, adding team members, and handling file submissions has been rigorously tested through both automated feature tests and manual UI-based tests. This dual approach ensures that the system remains stable in real-world scenarios.
+      </p>
+    </div>
+    
+    <!-- AI Tools Section -->
+    <div class="content" id="ai-tools">
+      <h2>AI Tools Used for Code Refactoring</h2>
+      <p>
+        In our refactoring process, we took full advantage of the capabilities offered by modern AI-powered tools. In particular, Cursor IDE played a pivotal role. Cursor provided advanced code analysis, enabling us to search semantically across the entire codebase, intelligently navigate through complex relationships, and automatically suggest code refactorings.
+      </p>
+      <p>
+        The tool’s contextual understanding helped us quickly identify areas where the business logic was misplaced, such as in controllers that were too heavily burdened with multifaceted responsibilities. Moreover, its ability to suggest method renamings and reorganize code improved not only the readability but also the overall maintainability of the system. This integration of AI assistance ensured that our refactoring was both efficient and aligned with best practices.
+      </p>
+    </div>
+    
+    <!-- Conclusion Section -->
+    <div class="content" id="conclusion">
+      <h2>Conclusion</h2>
+      <p>
+        Transitioning from a user-centric model to a participant-centric model for managing team memberships has led to significant improvements in both clarity and maintainability. By rearchitecting the underlying database, updating models and controllers, and refining the view layer, we have reduced technical debt while offering a more robust, scalable foundation for future enhancements.
+      </p>
+      <p>
+        The refactored system not only ensures data integrity by uniquely linking team memberships to assignment-specific participants but also improves user experience with enhanced error handling and informative feedback. With comprehensive testing and the support of AI-assisted tools like Cursor IDE, we are confident that the updated implementation will benefit both instructors and students alike, setting the stage for further innovation within the Expertiza platform.
+      </p>
+    </div>
+    
+    <!-- References Section -->
+    <div class="content references" id="references">
+      <h2>References</h2>
+      <p>
+        The following resources were instrumental in guiding the refactoring process and ensuring adherence to best practices. We consulted the Expertiza GitHub repository for code examples, the Ruby on Rails documentation for framework-specific details, and RSPEC documentation to design our automated tests. Additionally, the principles outlined in "Clean Code: A Handbook of Agile Software Craftsmanship" provided a strong foundation for improving our coding standards.
+      </p>
+      <ol>
+        <li><a href="https://github.com/expertiza/expertiza" target="_blank">Expertiza on GitHub</a></li>
+        <li><a href="https://github.com/expertiza/expertiza-fork" target="_blank">GitHub Project Repository Fork</a></li>
+        <li><a href="https://expertiza.ncsu.edu" target="_blank">Expertiza Live Website</a></li>
+        <li><a href="https://docs.rubyonrails.org" target="_blank">Ruby on Rails Documentation</a></li>
+        <li><a href="https://rspec.info" target="_blank">RSpec Documentation</a></li>
+        <li><a href="https://www.oreilly.com/library/view/clean-code-a/9780136083238/" target="_blank">Clean Code: A Handbook of Agile Software Craftsmanship</a></li>
+      </ol>
+    </div>
+    
+    <!-- Peer Review Section -->
+    <div class="content peer-review" id="peer-review">
+      <h2>Peer Review Information</h2>
+      <p>
+        For instructors and peers reviewing this document on the wiki, please note that this narrative design document replaces the earlier bullet-based version. It provides a comprehensive, detailed overview of our design decisions, code updates, testing strategies, and the methodology used during the refactoring process.
+      </p>
+      <p>
+        This document is intended to serve as both an educational resource for future developers and a historical record of the improvements made during this project phase.
+      </p>
+      <p>
+        <strong>Instructor Credentials:</strong><br>
+        Username: <code>instructor6</code><br>
+        Password: <code>password</code>
+      </p>
+    </div>
+  </div>
+  
+  <footer class="footer">
+    <p>&copy; 2025 Expertiza Team. All rights reserved.</p>
+  </footer>
 </body>
-</html> 
+</html>
