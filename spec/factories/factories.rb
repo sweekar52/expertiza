@@ -281,21 +281,23 @@ FactoryBot.define do
     directory_num 0
   end
 
-  factory :team_user, class: TeamsParticipant do
-    team { AssignmentTeam.first || association(:assignment_team) }
-    # Beware: it is fragile to assume that role_id of student is 2 (or any other unchanging value)
-    user { User.where(role_id: 2).first || association(:student) }
-  end
-
   factory :team, class: Team do
-    id 1
-    name 'testteam'
-    parent_id 1
+    sequence(:name) { |n| "Team #{n}" }
+    parent_id { Assignment.first&.id || association(:assignment).id }
+    type 'AssignmentTeam'
+    comments_for_advertisement nil
+    advertise_for_partner false
+    submitted_hyperlinks nil
+    directory_num nil
+    grade_for_submission nil
+    comment_for_submission nil
+    make_public false
   end
 
   factory :invitation, class: Invitation do
     reply_status 'W'
   end
+
   factory :join_team_request, class: JoinTeamRequest do
     id 1
     participant_id 5
@@ -305,6 +307,7 @@ FactoryBot.define do
     created_at '2020-03-24 12:10:20'
     updated_at '2020-03-24 12:10:20'
   end
+
   factory :topic, class: SignUpTopic do
     topic_name 'Hello world!'
     assignment { Assignment.first || association(:assignment) }
@@ -335,8 +338,14 @@ FactoryBot.define do
     handle 'handle'
     time_stamp nil
     digital_signature nil
-    can_mentor false
+    can_mentor true
     can_take_quiz true
+
+    after(:build) do |participant|
+      if participant.assignment.present?
+        participant.parent_id = participant.assignment.id
+      end
+    end
   end
 
   factory :course_participant, class: CourseParticipant do
@@ -760,5 +769,26 @@ FactoryBot.define do
     id 1
     ta_id 1
     course_id 1
+  end
+
+  factory :user do
+    sequence(:name) { |n| "user#{n}" }
+    sequence(:fullname) { |n| "User #{n}" }
+    sequence(:email) { |n| "user#{n}@example.com" }
+    password { 'password' }
+    password_confirmation { 'password' }
+    role_id { 1 }
+    private_by_default { false }
+    mru_directory_path { nil }
+    email_on_review { true }
+    email_on_submission { true }
+    email_on_review_of_review { true }
+    is_new_user { false }
+    master_permission_granted { 0 }
+    handle { 'handle' }
+    digital_certificate { nil }
+    timezonepref { 'Eastern Time (US & Canada)' }
+    public_key { nil }
+    copy_of_emails { false }
   end
 end

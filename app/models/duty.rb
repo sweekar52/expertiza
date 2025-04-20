@@ -1,5 +1,6 @@
 class Duty < ApplicationRecord
   belongs_to :assignment
+  has_many :teams_participants, dependent: :nullify
   # validates name with format matching regex, length to be at least 3 and
   # same name cannot be assigned to multiple duties in particular assignment.
   validates :name,
