@@ -126,8 +126,8 @@ class TeamsController < ApplicationController
     unless @team.nil?
       # Find all SignedUpTeam records associated with the found team.
       @signed_up_team = SignedUpTeam.where(team_id: @team.id)
-      # Find all TeamsUser records associated with the found team.
-      @teams_users = TeamsUser.where(team_id: @team.id)
+      # Find all TeamsParticipant records associated with the found team.
+      @teams_users = TeamsParticipant.where(team_id: @team.id)
       # Check if there are SignedUpTeam records associated with the found team.
       unless @signed_up_team.nil?
         # If a topic is assigned to this team and there is only one signed up team record, and it's not waitlisted.
