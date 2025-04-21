@@ -555,7 +555,7 @@ Expertiza::Application.routes.draw do
   resources :popup do
     collection do
       get :reviewer_details_popup
-      get :team_users_popup
+      get :team_participants_popup
       get :view_review_scores_popup
       get :self_review_popup
       get :author_feedback_popup

@@ -358,7 +358,7 @@ class ReviewMappingController < ApplicationController
         else
           team = AssignmentTeam.create_team_and_node(assignment_id)
         end
-        ApplicationController.helpers.create_team_users(user, team.id)
+        ApplicationController.helpers.create_team_participants(user, team.id)
         teams << team
       end
     end
@@ -525,8 +525,8 @@ class ReviewMappingController < ApplicationController
           num_participants_this_team = TeamsParticipant.where(team_id: team.id).size
           # If there are some submitters or reviewers in this team, they are not treated as normal participants.
           # They should be removed from 'num_participants_this_team'
-          TeamsParticipant.where(team_id: team.id).each do |team_user|
-            temp_participant = Participant.where(user_id: team_user.user_id, parent_id: assignment_id).first
+          TeamsParticipant.where(team_id: team.id).each do |team_participant|
+            temp_participant = Participant.where(user_id: team_participant.user_id, parent_id: assignment_id).first
             num_participants_this_team -= 1 unless temp_participant.can_review && temp_participant.can_submit
           end
           # if all outstanding participants are already in selected_participants, just break the loop.

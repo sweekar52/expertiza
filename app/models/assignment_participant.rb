@@ -200,13 +200,13 @@ class AssignmentParticipant < Participant
   end
 
   # E2147 : Gets duty id of the assignment participant by mapping teams user with help of
-  # user_id. Will no longer be needed once teams_user is converted into participant_teams
+  # user_id. Will no longer be needed once teams_participant is converted into participant_teams
   def duty_id
-    participant = team_user
+    participant = team_participant
     return participant.duty_id if participant
   end
 
-  def team_user
+  def team_participant
     TeamsParticipant.where(team_id: team.id, user_id: user_id).first if team
   end
 end

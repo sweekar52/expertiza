@@ -3,7 +3,7 @@ class TeamsParticipant < ApplicationRecord
   belongs_to :participant
 
   # paper_trail, node, etc
-  has_one    :team_user_node,
+  has_one    :team_participant_node,
              foreign_key: 'node_object_id',
              dependent:   :destroy
   has_paper_trail
@@ -23,7 +23,7 @@ class TeamsParticipant < ApplicationRecord
 
   # destroy your node, the join record, and delete the team if empty
   def delete
-    team_user_node&.destroy
+    team_participant_node&.destroy
     t = team
     destroy
     t.destroy if t.teams_participants.empty?
